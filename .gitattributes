@@ -1,0 +1,21 @@
+*      text=auto
+*.css  text diff=css
+*.html text diff=html
+*.json text
+*.md   text diff=markdown
+*.png  binary
+*.svg  text
+*.ts   text
+*.tsx  text
+*.yaml text
+
+.editorconfig  text
+.gitattributes text export-ignore
+.gitignore     text export-ignore
+.node-version  text
+
+# Overrides
+.vscode/*.json linguist-language=jsonc
+
+package.json   eol=lf
+pnpm-lock.yaml eol=lf

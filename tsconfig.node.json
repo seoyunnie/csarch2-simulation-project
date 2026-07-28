@@ -1,0 +1,42 @@
+{
+  "$schema": "https://www.schemastore.org/tsconfig.json",
+
+  "compilerOptions": {
+    /* Type Checking */
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "exactOptionalPropertyTypes": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+
+    /* Modules */
+    "module": "node20",
+    "rewriteRelativeImportExtensions": true,
+    "types": ["node"],
+
+    /* Emit */
+    "noEmit": true,
+
+    /* Interop Constraints */
+    "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true,
+
+    /* Language and Environment */
+    "lib": ["ES2023"],
+    "moduleDetection": "force",
+    "target": "es2023",
+
+    /* Projects */
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
+
+    /* Completeness */
+    "skipLibCheck": true
+  },
+
+  "include": ["vite.config.ts"]
+}

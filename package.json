@@ -1,0 +1,68 @@
+{
+  "$schema": "https://www.schemastore.org/package.json",
+  "name": "csarch2-simulation-project",
+  "version": "0.0.0",
+  "private": true,
+  "homepage": "https://seoyunnie.github.io/csarch2-simulation-project",
+  "author": "Raphael Panaligan",
+  "contributors": [
+    "Darryl Ac-ac",
+    "Sean Cordero",
+    "Jek Degullado",
+    "Luis Gomez"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/seoyunnie/csarch2-simulation-project.git"
+  },
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite",
+    "fmt": "oxfmt",
+    "fmt:check": "pnpm run fmt --check",
+    "lint": "pnpm run lint:js && pnpm run lint:css",
+    "lint:css": "stylelint \"**/*.css\" --cache",
+    "lint:css:fix": "pnpm run lint:css --fix",
+    "lint:fix": "pnpm run lint:js:fix && pnpm run lint:css:fix",
+    "lint:js": "oxlint",
+    "lint:js:fix": "pnpm run lint:js --fix",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@babel/core": "^8.0.1",
+    "@rolldown/plugin-babel": "^0.2.3",
+    "@seoyunnie/oxc-config": "^1.5.0",
+    "@types/babel__core": "^7.20.5",
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.4",
+    "babel-plugin-react-compiler": "^1.0.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "oxfmt": "^0.61.0",
+    "oxlint": "^1.76.0",
+    "oxlint-tsgolint": "^7.0.2001",
+    "stylelint": "^17.14.1",
+    "stylelint-config-standard": "^40.0.0",
+    "typescript": "^7.0.2",
+    "vite": "^8.1.5"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "^11.17.0",
+      "onFail": "error"
+    },
+    "runtime": {
+      "name": "node",
+      "version": "^24.11.1",
+      "onFail": "error"
+    }
+  },
+  "packageManager": "pnpm@11.17.0+sha512.cca3cea332ad254bb84145f966d19f4879615210346fc92c79a047f23a0d7b3cca3c3792f0076ba1f1831d277efbcf0a9119b31a9a60eca7fb3d6231f331ef72"
+}
