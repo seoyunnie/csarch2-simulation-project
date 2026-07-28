@@ -1,0 +1,14 @@
+{
+  "recommendations": [
+    "editorconfig.editorconfig",
+
+    /* CSS */
+    "stylelint.vscode-stylelint",
+
+    /* JavaScript */
+    "oxc.oxc-vscode",
+
+    /* YAML */
+    "redhat.vscode-yaml"
+  ]
+}

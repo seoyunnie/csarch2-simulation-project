@@ -1,0 +1,5 @@
+# Dependency Resolution
+overrides:
+  "stylelint>cosmiconfig": "10.0.0-alpha.0"
+minimumReleaseAgeExclude:
+  - "@seoyunnie/*"
