@@ -19,7 +19,7 @@ export interface CacheBlock {
 }
 
 export interface CacheReadResult {
-  hit: boolean;
+  isHit: boolean;
   cacheBlock: number;
   evictedMemoryBlock?: number;
   accessTime: number;
@@ -161,7 +161,7 @@ export class Cache {
       this.#blocks[hitIdx].age = 0;
 
       return {
-        hit: true,
+        isHit: true,
         cacheBlock: hitIdx,
         accessTime: Cache.ACCESS_TIME,
       };
@@ -179,7 +179,7 @@ export class Cache {
       const newBlockIdx = this.#blocks.push(newBlock) - 1;
 
       return {
-        hit: false,
+        isHit: false,
         cacheBlock: newBlockIdx,
         accessTime: this.#missPenalty,
       };
@@ -193,7 +193,7 @@ export class Cache {
     this.#blocks[newBlockIdx] = newBlock;
 
     return {
-      hit: false,
+      isHit: false,
       cacheBlock: newBlockIdx,
       evictedMemoryBlock,
       accessTime: this.#missPenalty,
