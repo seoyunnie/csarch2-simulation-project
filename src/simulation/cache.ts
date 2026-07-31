@@ -39,10 +39,11 @@ export class Cache {
 
   readonly #missPenalty: number;
 
+  readonly #hitTime: number;
+  readonly #missTime: number;
+
   #hitCount = 0;
   #missCount = 0;
-
-  #totalAccessTime = 0;
 
   constructor(
     readPolicy: ReadPolicy,
@@ -63,10 +64,15 @@ export class Cache {
 
     this.#replacementAlgorithm = replacementAlgo;
 
-    this.#missPenalty = Cache.ACCESS_TIME + MEMORY_ACCESS_TIME * this.#blockSize;
+    this.#missPenalty = Cache.ACCESS_TIME + MEMORY_ACCESS_TIME * blockSize;
+
+    this.#hitTime = Cache.ACCESS_TIME * blockSize;
+    this.#missTime = Cache.ACCESS_TIME + MEMORY_ACCESS_TIME * blockSize;
 
     if (readPolicy === ReadPolicy.NonLoadThrough) {
       this.#missPenalty += Cache.ACCESS_TIME;
+
+      this.#missTime += Cache.ACCESS_TIME * this.#blockSize;
     }
   }
 
@@ -99,7 +105,7 @@ export class Cache {
   }
 
   get totalAccessTime(): number {
-    return this.#totalAccessTime;
+    return this.#hitCount * this.#hitTime + this.#missCount * this.#missTime;
   }
 
   get averageAccessTime(): number {
@@ -154,8 +160,6 @@ export class Cache {
     if (hitIdx !== -1) {
       this.#hitCount++;
 
-      this.#totalAccessTime += Cache.ACCESS_TIME;
-
       this.#increaseAges();
 
       this.#blocks[hitIdx].age = 0;
@@ -163,13 +167,11 @@ export class Cache {
       return {
         isHit: true,
         cacheBlock: hitIdx,
-        accessTime: Cache.ACCESS_TIME,
+        accessTime: this.#hitTime,
       };
     }
 
     this.#missCount++;
-
-    this.#totalAccessTime += this.#missPenalty;
 
     this.#increaseAges();
 
@@ -181,7 +183,7 @@ export class Cache {
       return {
         isHit: false,
         cacheBlock: newBlockIdx,
-        accessTime: this.#missPenalty,
+        accessTime: this.#missTime,
       };
     }
 
@@ -196,7 +198,7 @@ export class Cache {
       isHit: false,
       cacheBlock: newBlockIdx,
       evictedMemoryBlock,
-      accessTime: this.#missPenalty,
+      accessTime: this.#missTime,
     };
   }
 }
