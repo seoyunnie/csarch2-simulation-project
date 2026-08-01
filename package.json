@@ -31,7 +31,8 @@
   },
   "dependencies": {
     "react": "^19.2.8",
-    "react-dom": "^19.2.8"
+    "react-dom": "^19.2.8",
+    "strip-indent": "^4.1.1"
   },
   "devDependencies": {
     "@babel/core": "^8.0.1",
