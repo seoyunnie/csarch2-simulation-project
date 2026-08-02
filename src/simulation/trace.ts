@@ -15,7 +15,7 @@ export function formatTrace(entry: CacheTraceEntry): string {
   if (entry.result.isHit) {
     return dedent(`
       Reading memory block ${entry.memoryBlock}.
-      Cache hit.
+      ✅ Cache hit.
       Found in cache block ${entry.result.cacheBlock}
       Access completed in ${entry.result.accessTime} ms
       Cache: [${cache}]
@@ -25,7 +25,7 @@ export function formatTrace(entry: CacheTraceEntry): string {
   if (entry.result.evictedMemoryBlock !== undefined) {
     return dedent(`
       Reading memory block ${entry.memoryBlock}.
-      Cache miss.
+      ❌ Cache miss.
       Evicted memory block ${entry.result.evictedMemoryBlock}
       Loaded into cache block ${entry.result.cacheBlock}
       Access completed in ${entry.result.accessTime} ms
@@ -35,7 +35,7 @@ export function formatTrace(entry: CacheTraceEntry): string {
 
   return dedent(`
     Reading memory block ${entry.memoryBlock}.
-    Cache miss.
+    ❌ Cache miss.
     Loaded into cache block ${entry.result.cacheBlock}
     Access completed in ${entry.result.accessTime} ms
     Cache: [${cache}]
