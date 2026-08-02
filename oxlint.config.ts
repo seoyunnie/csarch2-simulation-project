@@ -12,8 +12,11 @@ export default defineConfig({
     {
       files: ["**/*.tsx"],
 
-      jsPlugins: [{ name: "react-compiler", specifier: "eslint-plugin-react-hooks" }],
+      jsPlugins: ["eslint-plugin-perfectionist", { name: "react-compiler", specifier: "eslint-plugin-react-hooks" }],
       rules: {
+        /* eslint-plugin-perfectionist */
+        "perfectionist/sort-jsx-props": ["error", { type: "natural" }],
+
         /* eslint-plugin-react-hooks */
         "react-compiler/component-hook-factories": "error",
         "react-compiler/config": "error",
