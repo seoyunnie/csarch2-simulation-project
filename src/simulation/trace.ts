@@ -1,16 +1,16 @@
 import { dedent } from "strip-indent";
 
-import type { CacheBlock, CacheReadResult } from "./cache.ts";
+import type { CacheReadResult, CacheSnapshot } from "./cache.ts";
 
 export interface CacheTraceEntry {
   readonly memoryBlock: number;
 
   readonly result: Readonly<CacheReadResult>;
-  readonly cacheBlocks: readonly CacheBlock[];
+  readonly snapshot: CacheSnapshot;
 }
 
 export function formatTrace(entry: CacheTraceEntry): string {
-  const cache = entry.cacheBlocks.map((b) => b.memoryBlock).join(", ");
+  const cache = entry.snapshot.blocks.map((b) => b.memoryBlock).join(", ");
 
   if (entry.result.isHit) {
     return dedent(`

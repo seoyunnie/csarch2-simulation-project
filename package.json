@@ -26,6 +26,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@mantine/core": "^9.5.0",
+    "@mantine/form": "^9.5.0",
+    "@mantine/hooks": "^9.5.0",
+    "@phosphor-icons/react": "^2.1.10",
+    "fraction.js": "^5.3.4",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "strip-indent": "^4.1.1"

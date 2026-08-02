@@ -1,108 +1,166 @@
+import { AppShell, Button, Container, Divider, NumberInput, Select, Stack, TextInput, Title } from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { PlayIcon } from "@phosphor-icons/react";
+import { type JSX, useState } from "react";
 
-import { useState } from "react";
-import type { JSX } from "react/jsx-runtime";
-
-import heroImg from "./assets/hero.png";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "./assets/vite.svg";
+import { CacheTable } from "./components/cache-table.tsx";
+import { MainMemoryView } from "./components/main-memory-view.tsx";
+import { SimulationSummary, type SimulationSummaryProps } from "./components/simulation-summary.tsx";
+import { TraceLog } from "./components/trace-log.tsx";
+import { Cache, ReadPolicy, ReplacementAlgorithm } from "./simulation/cache.ts";
+import { MAIN_MEMORY_BLOCK_COUNT } from "./simulation/memory.ts";
+import type { CacheTraceEntry } from "./simulation/trace.ts";
 
 export function App(): JSX.Element {
-  const [count, setCount] = useState(0);
+  const [memBlocks, setMemBlocks] = useState<number[]>([]);
+  const [cache, setCache] = useState<Cache>(
+    new Cache(ReadPolicy.NonLoadThrough, ReplacementAlgorithm.LRU, Cache.MINIMUM_BLOCK_SIZE, Cache.MINIMUM_BLOCK_COUNT),
+  );
+
+  const [trace, setTrace] = useState<CacheTraceEntry[]>([]);
+  const [traceIdx, setTraceIdx] = useState(0);
+
+  const form = useForm({
+    mode: "uncontrolled",
+    initialValues: {
+      memoryBlocks: "",
+      readPolicy: ReadPolicy.NonLoadThrough,
+      replacementAlgorithm: ReplacementAlgorithm.LRU,
+      blockSize: Cache.MINIMUM_BLOCK_SIZE,
+      blockCount: Cache.MINIMUM_BLOCK_COUNT,
+    },
+    validate: {
+      memoryBlocks: (val) => {
+        if (val.length === 0) {
+          return "Enter at least one memory block";
+        }
+
+        // oxlint-disable-next-line prefer-named-capture-group
+        if (!/^\d+(,\d+)*$/u.test(val)) {
+          return "Invalid list format";
+        }
+
+        for (const [idx, num] of val.split(",").entries()) {
+          if (Number(num.trim()) > MAIN_MEMORY_BLOCK_COUNT) {
+            return `Memory block "${num}" at position ${idx + 1} is invalid`;
+          }
+        }
+      },
+    },
+  });
+
+  const handleSubmit = form.onSubmit((vals) => {
+    const newMemBlocks = vals.memoryBlocks.split(",").map(Number);
+    const newCache = new Cache(vals.readPolicy, vals.replacementAlgorithm, vals.blockSize, vals.blockCount);
+
+    const newTrace: CacheTraceEntry[] = [];
+
+    for (const block of newMemBlocks) {
+      const res = newCache.read(block);
+
+      newTrace.push({
+        memoryBlock: block,
+        result: res,
+        snapshot: newCache.snapshot(),
+      });
+    }
+
+    setMemBlocks(newMemBlocks);
+    setCache(newCache);
+
+    setTrace(newTrace);
+    setTraceIdx(newTrace.length - 1);
+  });
+
+  const currSnapshot = trace[traceIdx]?.snapshot;
+  const simulationSummary = {
+    accessCount: currSnapshot?.accessCount ?? 0,
+    hitCount: currSnapshot?.hitCount ?? 0,
+    missCount: currSnapshot?.missCount ?? 0,
+
+    hitRate: currSnapshot?.hitRate ?? 0,
+    missRate: currSnapshot?.missRate ?? 0,
+
+    averageAccessTime: currSnapshot?.averageAccessTime ?? 0,
+    totalAccessTime: currSnapshot?.totalAccessTime ?? 0,
+  } satisfies SimulationSummaryProps;
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => {
-            setCount((c) => c + 1);
-          }}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <AppShell header={{ height: "100%" }} mode="static" navbar={{ width: 400, breakpoint: "sm" }} padding="md">
+      <AppShell.Header p="md">
+        <Title>Cache Memory Simulator</Title>
+      </AppShell.Header>
 
-      <div className="ticks" />
+      <AppShell.Navbar p="md">
+        <form onSubmit={handleSubmit}>
+          <Stack>
+            <TextInput
+              description={`Coma-separated list of memory block IDs (0-${MAIN_MEMORY_BLOCK_COUNT - 1})`}
+              key={form.key("memoryBlocks")}
+              label="Memory blocks"
+              withAsterisk
+              {...form.getInputProps("memoryBlocks")}
+            />
+            <Select
+              allowDeselect={false}
+              data={[
+                { label: "Load-through", value: ReadPolicy.LoadThrough },
+                { label: "Non-load-through", value: ReadPolicy.NonLoadThrough },
+              ]}
+              key={form.key("readPolicy")}
+              label="Read policy"
+              withAlignedLabels
+              {...form.getInputProps("readPolicy")}
+            />
+            <Select
+              allowDeselect={false}
+              data={[
+                { label: "Least recently used", value: ReplacementAlgorithm.LRU },
+                { label: "Most recently used", value: ReplacementAlgorithm.MRU },
+              ]}
+              key={form.key("replacementAlgorithm")}
+              label="Replacement Algorithm"
+              withAlignedLabels
+              {...form.getInputProps("replacementAlgorithm")}
+            />
+            <NumberInput
+              allowDecimal={false}
+              key={form.key("blockSize")}
+              label="Block size"
+              min={Cache.MINIMUM_BLOCK_SIZE}
+              {...form.getInputProps("blockSize")}
+            />
+            <NumberInput
+              allowDecimal={false}
+              key={form.key("blockCount")}
+              label="Block count"
+              min={Cache.MINIMUM_BLOCK_COUNT}
+              {...form.getInputProps("blockCount")}
+            />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon" />
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank" rel="noreferrer">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank" rel="noreferrer">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon" />
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank" rel="noreferrer">
-                <svg className="button-icon" role="presentation" aria-hidden="true">
-                  <use href="/icons.svg#github-icon" />
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank" rel="noreferrer">
-                <svg className="button-icon" role="presentation" aria-hidden="true">
-                  <use href="/icons.svg#discord-icon" />
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank" rel="noreferrer">
-                <svg className="button-icon" role="presentation" aria-hidden="true">
-                  <use href="/icons.svg#x-icon" />
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank" rel="noreferrer">
-                <svg className="button-icon" role="presentation" aria-hidden="true">
-                  <use href="/icons.svg#bluesky-icon" />
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+            <Button color="green" leftSection={<PlayIcon weight="fill" />} mt="md" type="submit">
+              Run
+            </Button>
+          </Stack>
+        </form>
+      </AppShell.Navbar>
 
-      <div className="ticks" />
-      <section id="spacer" />
-    </>
+      <AppShell.Main>
+        <Container>
+          <Stack>
+            <MainMemoryView memoryBlocks={memBlocks} setTraceIndex={setTraceIdx} trace={trace} traceIndex={traceIdx} />
+
+            <Divider />
+
+            <CacheTable blockCount={cache.blockCount} blocks={currSnapshot?.blocks ?? []} />
+            <TraceLog trace={trace} traceIndex={traceIdx} />
+
+            <Divider />
+
+            <SimulationSummary {...simulationSummary} />
+          </Stack>
+        </Container>
+      </AppShell.Main>
+    </AppShell>
   );
 }

@@ -25,6 +25,20 @@ export interface CacheReadResult {
   accessTime: number;
 }
 
+export interface CacheSnapshot {
+  readonly blocks: readonly Readonly<CacheBlock>[];
+
+  readonly accessCount: number;
+  readonly hitCount: number;
+  readonly missCount: number;
+
+  readonly hitRate: number;
+  readonly missRate: number;
+
+  readonly averageAccessTime: number;
+  readonly totalAccessTime: number;
+}
+
 export class Cache {
   static readonly MINIMUM_BLOCK_SIZE = 2;
   static readonly MINIMUM_BLOCK_COUNT = 4;
@@ -201,6 +215,22 @@ export class Cache {
       cacheBlock: newBlockIdx,
       evictedMemoryBlock,
       accessTime: this.#missTime,
+    };
+  }
+
+  snapshot(): CacheSnapshot {
+    return {
+      blocks: structuredClone(this.#blocks),
+
+      accessCount: this.accessCount,
+      hitCount: this.#hitCount,
+      missCount: this.#missCount,
+
+      hitRate: this.hitRate,
+      missRate: this.missRate,
+
+      averageAccessTime: this.averageAccessTime,
+      totalAccessTime: this.totalAccessTime,
     };
   }
 }
