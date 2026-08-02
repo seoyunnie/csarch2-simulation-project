@@ -31,11 +31,12 @@ export class Cache {
 
   static readonly ACCESS_TIME = 1;
 
-  readonly #blockSize: number;
+  readonly blockSize: number;
   readonly #blocks: CacheBlock[] = [];
-  readonly #blockCount: number;
+  readonly blockCount: number;
 
-  readonly #replacementAlgorithm: ReplacementAlgorithm;
+  readonly readPolicy: ReadPolicy;
+  readonly replacementAlgorithm: ReplacementAlgorithm;
 
   readonly #missPenalty: number;
 
@@ -59,10 +60,11 @@ export class Cache {
       throw new RangeError("Cache block count is out of range");
     }
 
-    this.#blockSize = blockSize;
-    this.#blockCount = blockCnt;
+    this.blockSize = blockSize;
+    this.blockCount = blockCnt;
 
-    this.#replacementAlgorithm = replacementAlgo;
+    this.readPolicy = readPolicy;
+    this.replacementAlgorithm = replacementAlgo;
 
     this.#missPenalty = Cache.ACCESS_TIME + MEMORY_ACCESS_TIME * blockSize;
 
@@ -72,7 +74,7 @@ export class Cache {
     if (readPolicy === ReadPolicy.NonLoadThrough) {
       this.#missPenalty += Cache.ACCESS_TIME;
 
-      this.#missTime += Cache.ACCESS_TIME * this.#blockSize;
+      this.#missTime += Cache.ACCESS_TIME * this.blockSize;
     }
   }
 
@@ -177,7 +179,7 @@ export class Cache {
 
     const newBlock = { memoryBlock: memBlock, age: 0 } satisfies CacheBlock;
 
-    if (this.#blocks.length < this.#blockCount) {
+    if (this.#blocks.length < this.blockCount) {
       const newBlockIdx = this.#blocks.push(newBlock) - 1;
 
       return {
@@ -188,7 +190,7 @@ export class Cache {
     }
 
     const newBlockIdx =
-      this.#replacementAlgorithm === ReplacementAlgorithm.LRU ? this.#findLRUBlock() : this.#findMRUBlock();
+      this.replacementAlgorithm === ReplacementAlgorithm.LRU ? this.#findLRUBlock() : this.#findMRUBlock();
 
     const { memoryBlock: evictedMemoryBlock } = this.#blocks[newBlockIdx];
 
