@@ -21,12 +21,8 @@
     "dev": "vite",
     "fmt": "oxfmt",
     "fmt:check": "pnpm run fmt --check",
-    "lint": "pnpm run lint:js && pnpm run lint:css",
-    "lint:css": "stylelint \"**/*.css\" --cache",
-    "lint:css:fix": "pnpm run lint:css --fix",
-    "lint:fix": "pnpm run lint:js:fix && pnpm run lint:css:fix",
-    "lint:js": "oxlint",
-    "lint:js:fix": "pnpm run lint:js --fix",
+    "lint": "oxlint",
+    "lint:fix": "pnpm run lint --fix",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -49,8 +45,6 @@
     "oxfmt": "^0.61.0",
     "oxlint": "^1.76.0",
     "oxlint-tsgolint": "^7.0.2001",
-    "stylelint": "^17.14.1",
-    "stylelint-config-standard": "^40.0.0",
     "typescript": "^7.0.2",
     "vite": "^8.1.5"
   },
