@@ -7,5 +7,6 @@ import { defineConfig } from "vite";
 export default defineConfig({
   resolve: { alias: { "@": path.resolve(import.meta.dirname, "src") } },
 
+  base: "/csarch2-simulation-project/",
   plugins: [react(), babel({ presets: [reactCompilerPreset()] })],
 });
