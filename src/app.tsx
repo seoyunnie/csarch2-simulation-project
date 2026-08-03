@@ -1,6 +1,19 @@
-import { AppShell, Button, Container, Divider, NumberInput, Select, Stack, TextInput, Title } from "@mantine/core";
+import {
+  AppShell,
+  Burger,
+  Button,
+  Container,
+  Divider,
+  Group,
+  NumberInput,
+  Select,
+  Stack,
+  TextInput,
+  Title,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { PlayIcon } from "@phosphor-icons/react";
+import { useDisclosure } from "@mantine/hooks";
 import { type JSX, useState } from "react";
 
 import { CacheTable } from "./components/cache-table.tsx";
@@ -90,10 +103,19 @@ export function App(): JSX.Element {
     totalAccessTime: currSnapshot?.totalAccessTime ?? 0,
   } satisfies SimulationSummaryProps;
 
+  const [isConfigOpened, { toggle: handleConfigToggle }] = useDisclosure();
   return (
-    <AppShell header={{ height: "100%" }} mode="static" navbar={{ width: 400, breakpoint: "sm" }} padding="md">
+    <AppShell
+      header={{ height: { base: "10rem", xs: "5rem" } }}
+      navbar={{ width: 400, breakpoint: "sm", collapsed: { mobile: !isConfigOpened } }}
+      padding="md"
+    >
       <AppShell.Header p="md">
-        <Title>Cache Memory Simulator</Title>
+        <Group h="100%">
+          <Burger hiddenFrom="sm" onClick={handleConfigToggle} opened={isConfigOpened} size="sm" />
+
+          <Title>Cache Memory Simulator</Title>
+        </Group>
       </AppShell.Header>
 
       <AppShell.Navbar p="md">
