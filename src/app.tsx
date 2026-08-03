@@ -1,4 +1,5 @@
 import {
+  Affix,
   AppShell,
   Burger,
   Button,
@@ -10,10 +11,11 @@ import {
   Stack,
   TextInput,
   Title,
+  Transition,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { PlayIcon } from "@phosphor-icons/react";
-import { useDisclosure } from "@mantine/hooks";
+import { useDisclosure, useWindowScroll } from "@mantine/hooks";
+import { ArrowLineUpIcon, type IconWeight, PlayIcon } from "@phosphor-icons/react";
 import { type JSX, useState } from "react";
 
 import { CacheTable } from "./components/cache-table.tsx";
@@ -24,6 +26,8 @@ import { Cache, ReadPolicy, ReplacementAlgorithm } from "./simulation/cache.ts";
 import { MAIN_MEMORY_BLOCK_COUNT } from "./simulation/memory.ts";
 import type { CacheTraceEntry } from "./simulation/trace.ts";
 import { isPowerOfTwo } from "./utils/number.ts";
+
+const ICON_WEIGHT: IconWeight = "bold";
 
 export function App(): JSX.Element {
   const [memBlocks, setMemBlocks] = useState<number[]>([]);
@@ -195,6 +199,22 @@ export function App(): JSX.Element {
             <SimulationSummary {...simulationSummary} />
           </Stack>
         </Container>
+
+        <Affix position={{ bottom: 20, right: 20 }}>
+          <Transition mounted={scrollPos.y > 0} transition="slide-up">
+            {(style) => (
+              <Button
+                leftSection={<ArrowLineUpIcon weight={ICON_WEIGHT} />}
+                onClick={() => {
+                  scrollTo({ y: 0 });
+                }}
+                style={style}
+              >
+                Scroll to top
+              </Button>
+            )}
+          </Transition>
+        </Affix>
       </AppShell.Main>
     </AppShell>
   );
