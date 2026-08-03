@@ -1,4 +1,3 @@
-import { isPowerOfTwo } from "../utils/number.ts";
 import { MAIN_MEMORY_BLOCK_COUNT, MEMORY_ACCESS_TIME } from "./memory.ts";
 
 export const ReadPolicy = {
@@ -66,14 +65,6 @@ export class Cache {
     blockSize = Cache.MINIMUM_BLOCK_SIZE,
     blockCnt = Cache.MINIMUM_BLOCK_COUNT,
   ) {
-    if (blockSize < Cache.MINIMUM_BLOCK_SIZE || !isPowerOfTwo(blockSize)) {
-      throw new RangeError("Cache block size is out of range");
-    }
-
-    if (blockCnt < Cache.MINIMUM_BLOCK_COUNT || !isPowerOfTwo(blockCnt)) {
-      throw new RangeError("Cache block count is out of range");
-    }
-
     this.blockSize = blockSize;
     this.blockCount = blockCnt;
 

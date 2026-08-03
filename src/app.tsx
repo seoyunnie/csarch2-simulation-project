@@ -10,6 +10,7 @@ import { TraceLog } from "./components/trace-log.tsx";
 import { Cache, ReadPolicy, ReplacementAlgorithm } from "./simulation/cache.ts";
 import { MAIN_MEMORY_BLOCK_COUNT } from "./simulation/memory.ts";
 import type { CacheTraceEntry } from "./simulation/trace.ts";
+import { isPowerOfTwo } from "./utils/number.ts";
 
 export function App(): JSX.Element {
   const [memBlocks, setMemBlocks] = useState<number[]>([]);
@@ -40,12 +41,16 @@ export function App(): JSX.Element {
           return "Invalid list format";
         }
 
-        for (const [idx, num] of val.split(",").entries()) {
-          if (Number(num.trim()) > MAIN_MEMORY_BLOCK_COUNT) {
-            return `Memory block "${num}" at position ${idx + 1} is invalid`;
+        const maxVal = MAIN_MEMORY_BLOCK_COUNT - 1;
+
+        for (const num of val.split(",")) {
+          if (Number(num.trim()) > maxVal) {
+            return `Memory block "${num}" is larger than ${maxVal}`;
           }
         }
       },
+      blockSize: (val) => (isPowerOfTwo(val) ? null : "Block size must be a power of 2"),
+      blockCount: (val) => (isPowerOfTwo(val) ? null : "Block size must be a power of 2"),
     },
   });
 
