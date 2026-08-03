@@ -2,6 +2,7 @@
 *.html text diff=html
 *.json text
 *.md   text diff=markdown
+*.png  binary
 *.ts   text
 *.tsx  text
 *.txt  text
