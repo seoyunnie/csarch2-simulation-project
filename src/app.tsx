@@ -104,6 +104,8 @@ export function App(): JSX.Element {
   } satisfies SimulationSummaryProps;
 
   const [isConfigOpened, { toggle: handleConfigToggle }] = useDisclosure();
+  const [scrollPos, scrollTo] = useWindowScroll();
+
   return (
     <AppShell
       header={{ height: { base: "10rem", xs: "5rem" } }}
@@ -119,57 +121,63 @@ export function App(): JSX.Element {
       </AppShell.Header>
 
       <AppShell.Navbar p="md">
-        <form onSubmit={handleSubmit}>
-          <Stack>
-            <TextInput
-              description={`Coma-separated list of memory block IDs (0-${MAIN_MEMORY_BLOCK_COUNT - 1})`}
-              key={form.key("memoryBlocks")}
-              label="Memory blocks"
-              withAsterisk
-              {...form.getInputProps("memoryBlocks")}
-            />
-            <Select
-              allowDeselect={false}
-              data={[
-                { label: "Load-through", value: ReadPolicy.LoadThrough },
-                { label: "Non-load-through", value: ReadPolicy.NonLoadThrough },
-              ]}
-              key={form.key("readPolicy")}
-              label="Read policy"
-              withAlignedLabels
-              {...form.getInputProps("readPolicy")}
-            />
-            <Select
-              allowDeselect={false}
-              data={[
-                { label: "Least recently used", value: ReplacementAlgorithm.LRU },
-                { label: "Most recently used", value: ReplacementAlgorithm.MRU },
-              ]}
-              key={form.key("replacementAlgorithm")}
-              label="Replacement Algorithm"
-              withAlignedLabels
-              {...form.getInputProps("replacementAlgorithm")}
-            />
-            <NumberInput
-              allowDecimal={false}
-              key={form.key("blockSize")}
-              label="Block size"
-              min={Cache.MINIMUM_BLOCK_SIZE}
-              {...form.getInputProps("blockSize")}
-            />
-            <NumberInput
-              allowDecimal={false}
-              key={form.key("blockCount")}
-              label="Block count"
-              min={Cache.MINIMUM_BLOCK_COUNT}
-              {...form.getInputProps("blockCount")}
-            />
+        <Stack>
+          <Title order={2}>Configure</Title>
 
-            <Button color="green" leftSection={<PlayIcon weight="fill" />} mt="md" type="submit">
-              Run
-            </Button>
-          </Stack>
-        </form>
+          <Divider />
+
+          <form onSubmit={handleSubmit}>
+            <Stack>
+              <TextInput
+                description={`Coma-separated list of memory block IDs (0-${MAIN_MEMORY_BLOCK_COUNT - 1})`}
+                key={form.key("memoryBlocks")}
+                label="Memory blocks"
+                withAsterisk
+                {...form.getInputProps("memoryBlocks")}
+              />
+              <Select
+                allowDeselect={false}
+                data={[
+                  { label: "Load-through", value: ReadPolicy.LoadThrough },
+                  { label: "Non-load-through", value: ReadPolicy.NonLoadThrough },
+                ]}
+                key={form.key("readPolicy")}
+                label="Read policy"
+                withAlignedLabels
+                {...form.getInputProps("readPolicy")}
+              />
+              <Select
+                allowDeselect={false}
+                data={[
+                  { label: "Least recently used", value: ReplacementAlgorithm.LRU },
+                  { label: "Most recently used", value: ReplacementAlgorithm.MRU },
+                ]}
+                key={form.key("replacementAlgorithm")}
+                label="Replacement Algorithm"
+                withAlignedLabels
+                {...form.getInputProps("replacementAlgorithm")}
+              />
+              <NumberInput
+                allowDecimal={false}
+                key={form.key("blockSize")}
+                label="Block size"
+                min={Cache.MINIMUM_BLOCK_SIZE}
+                {...form.getInputProps("blockSize")}
+              />
+              <NumberInput
+                allowDecimal={false}
+                key={form.key("blockCount")}
+                label="Block count"
+                min={Cache.MINIMUM_BLOCK_COUNT}
+                {...form.getInputProps("blockCount")}
+              />
+
+              <Button color="green" leftSection={<PlayIcon weight="fill" />} mt="md" type="submit">
+                Run
+              </Button>
+            </Stack>
+          </form>
+        </Stack>
       </AppShell.Navbar>
 
       <AppShell.Main>
