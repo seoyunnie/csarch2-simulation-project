@@ -34,10 +34,8 @@ Recently Used (LRU) and Most Recently Used (MRU) replacement algorithms.
 - **Input Pattern:** Access up to $2n$ cache blocks sequentially and repeat the sequence twice.
 - **Sequence ($n = 4$):** `0,1,2,3,4,5,6,7,0,1,2,3,4,5,6,7` (16 total accesses).
 
-<div align="center">
-  <img alt="LRU test screenshot" src="./docs/images/sequential-sequence-lru.png" width="45%" />
-  <img alt="MRU test screenshot" src="./docs/images/sequential-sequence-mru.png" width="45%" />
-</div>
+![LRU test screenshot](./docs/images/sequential-sequence-lru.png)
+![MRU test screenshot](./docs/images/sequential-sequence-mru.png)
 
 | Metric                         | Least Recently Used | Most Recently Used |
 | :----------------------------- | :-----------------: | :----------------: |
@@ -71,10 +69,8 @@ Recently Used (LRU) and Most Recently Used (MRU) replacement algorithms.
 - **Sequence ($n = 4$):** `0,1,2,3,0,1,2,3,4,5,6,7,0,1,2,3,4,5,6,7,3,2,1,0,7,6,5,4,3,2,1,0,7,6,5,4,3,2,1,0` (40 total
   accesses).
 
-<div align="center">
-  <img alt="LRU test screenshot" src="./docs/images/mid-repeat-blocks-lru.png" width="45%" />
-  <img alt="MRU test screenshot" src="./docs/images/mid-repeat-blocks-mru.png" width="45%" />
-</div>
+![LRU test screenshot](./docs/images/mid-repeat-blocks-lru.png)
+![MRU test screenshot](./docs/images/mid-repeat-blocks-mru.png)
 
 | Metric                         | Least Recently Used | Most Recently Used |
 | :----------------------------- | :-----------------: | :----------------: |
@@ -102,10 +98,8 @@ Recently Used (LRU) and Most Recently Used (MRU) replacement algorithms.
 
 - **Input Pattern:** 64 randomly generated block access requests within range 0 to 1023.
 
-<div align="center">
-  <img alt="LRU test screenshot" src="./docs/images/random-sequence-lru.png" width="45%" />
-  <img alt="MRU test screenshot" src="./docs/images/random-sequence-mru.png" width="45%" />
-</div>
+![LRU test screenshot](./docs/images/random-sequence-lru.png)
+![MRU test screenshot](./docs/images/random-sequence-mru.png)
 
 | Metric                         | Least Recently Used | Most Recently Used |
 | :----------------------------- | :-----------------: | :----------------: |
