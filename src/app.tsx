@@ -153,8 +153,8 @@ export function App(): JSX.Element {
               <Select
                 allowDeselect={false}
                 data={[
-                  { label: "Least recently used", value: ReplacementAlgorithm.LRU },
-                  { label: "Most recently used", value: ReplacementAlgorithm.MRU },
+                  { label: "Least Recently Used (LRU)", value: ReplacementAlgorithm.LRU },
+                  { label: "Most Recently Used (MRU)", value: ReplacementAlgorithm.MRU },
                 ]}
                 key={form.key("replacementAlgorithm")}
                 label="Replacement Algorithm"
