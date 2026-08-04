@@ -19,6 +19,10 @@ Recently Used (LRU) and Most Recently Used (MRU) replacement algorithms.
 
 ## Video Walkthrough
 
+<https://youtu.be/rt3hsMZfzx8>
+
+A short video demonstrating the system. (The video is unlisted.)
+
 ## Test Cases
 
 ### Simulator Configuration
