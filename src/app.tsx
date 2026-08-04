@@ -157,7 +157,7 @@ export function App(): JSX.Element {
                   { label: "Most Recently Used (MRU)", value: ReplacementAlgorithm.MRU },
                 ]}
                 key={form.key("replacementAlgorithm")}
-                label="Replacement Algorithm"
+                label="Replacement algorithm"
                 withAlignedLabels
                 {...form.getInputProps("replacementAlgorithm")}
               />
